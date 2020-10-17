@@ -10,6 +10,8 @@ Only the host needs an ngrok.com account.
 * End-to-End encryption
 
 
+![screenshot](screenshot.png)
+
 ## Installation
 
 ### Requires Python 3.8+
