@@ -3,6 +3,13 @@
 Retro-CLI uses ngrok to setup a local server and generate an invitation code for others to join.
 Only the host needs an ngrok.com account.
 
+## Features
+
+* Host or join retro
+* Connectin via ngrox.com
+* End-to-End encryption
+
+
 ## Installation
 
 ### Requires Python 3.8+
