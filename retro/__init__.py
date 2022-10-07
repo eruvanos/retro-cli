@@ -9,16 +9,13 @@ def start(server=False):
     # Get connection
     if server:
         backend = Backend(
-            auth_token=None # this will be taken from the global ngrok config
+            auth_token=None  # this will be taken from the global ngrok config
         )
         backend.prepare_tunnel()
         backend.start()
         connection_string = backend.connection_string()
     else:
-        connection_string = input_dialog(
-            title='Connect to retro',
-            text='Key:'
-        ).run()
+        connection_string = input_dialog(title="Connect to retro", text="Key:").run()
 
     # Connect client
     client = RPCStoreClient()

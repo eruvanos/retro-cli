@@ -8,8 +8,8 @@ authors = ["Maic Siemering <maic@siemering.tech>"]
 python = "^3.8.1"
 prompt-toolkit = "^3.0.8"
 colorama = "^0.4.4"
-pyngrok = "^4.2.2"
-cryptography = "^3.1.1"
+pyngrok = "^5.1.0"
+cryptography = "^38.0.1"
 
 [tool.poetry.dev-dependencies]
 

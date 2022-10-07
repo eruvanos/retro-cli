@@ -17,7 +17,7 @@ class EnhancedJSONEncoder(JSONEncoder):
 
 class Network:
     BUFFER = 2
-    ORDER = 'big'
+    ORDER = "big"
 
     def __init__(self, socket: socket.socket):
         self.socket = socket
@@ -42,7 +42,7 @@ class Network:
         try:
             return json.loads(data)
         except JSONDecodeError as e:
-            logger.exception(f'Could not parse data: {data}')
+            logger.exception(f"Could not parse data: {data}")
             return None
 
     def send_json(self, data: Any):
@@ -63,6 +63,7 @@ class SecureNetwork(Network):
         super().__init__(socket_)
 
         from cryptography.fernet import Fernet
+
         self.cipher_suite = Fernet(key.encode())
 
     # --- security layer
@@ -71,7 +72,7 @@ class SecureNetwork(Network):
         if recv:
             return self.decrypt(recv)
         else:
-            return ''
+            return ""
 
     def _send(self, msg: str):
         super()._send(self.encrypt(msg))
@@ -80,6 +81,7 @@ class SecureNetwork(Network):
     @staticmethod
     def generate_key():
         from cryptography.fernet import Fernet
+
         return Fernet.generate_key().decode()
 
     def encrypt(self, text: str):

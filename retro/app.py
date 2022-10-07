@@ -13,14 +13,14 @@ from prompt_toolkit.layout.layout import Layout
 from retro.persistence import Category, RetroStore, InMemoryStore
 
 
-def start_app(store: RetroStore, connection_string: str = ''):
+def start_app(store: RetroStore, connection_string: str = ""):
     kb = KeyBindings()
 
-    @kb.add('c-q')
+    @kb.add("c-q")
     def exit_(event):
         event.app.exit()
 
-    @kb.add('c-r')
+    @kb.add("c-r")
     def refresh_(event):
         refresh()
 
@@ -33,39 +33,39 @@ def start_app(store: RetroStore, connection_string: str = ''):
             Category.BAD: StringIO(),
         }
         for item in items:
-            texts[item.category].write(f'{item.key}. {item.text}\n')
+            texts[item.category].write(f"{item.key}. {item.text}\n")
 
         good_buffer.text = texts[Category.GOOD].getvalue()
         neutral_buffer.text = texts[Category.NEUTRAL].getvalue()
         bad_buffer.text = texts[Category.BAD].getvalue()
 
-    @kb.add('c-m')
+    @kb.add("c-m")
     def enter_(event):
         text = input_buffer.text
 
-        if text.startswith('+'):
+        if text.startswith("+"):
             input_buffer.reset()
             store.add_item(text[1:].strip(), Category.GOOD)
-        elif text.startswith('.'):
+        elif text.startswith("."):
             input_buffer.reset()
             store.add_item(text[1:].strip(), Category.NEUTRAL)
-        elif text.startswith('-'):
+        elif text.startswith("-"):
             input_buffer.reset()
             store.add_item(text[1:].strip(), Category.BAD)
 
-        elif text.startswith('mv '):
+        elif text.startswith("mv "):
             cmd, key, column = text.split()
 
             categories = {
-                '+': Category.GOOD,
-                '.': Category.NEUTRAL,
-                '-': Category.BAD,
+                "+": Category.GOOD,
+                ".": Category.NEUTRAL,
+                "-": Category.BAD,
             }
 
             input_buffer.reset()
             store.move_item(int(key), categories[column])
 
-        elif text.startswith('rm '):
+        elif text.startswith("rm "):
             cmd, key = text.split()
 
             input_buffer.reset()
@@ -73,11 +73,11 @@ def start_app(store: RetroStore, connection_string: str = ''):
 
         refresh()
 
-    @kb.add('c-p')
+    @kb.add("c-p")
     def ping_(event):
         start = time()
         store.list(Category.GOOD)
-        app.print_text(f'latency: {time() - start:.3f}')
+        app.print_text(f"latency: {time() - start:.3f}")
 
     good_buffer = Buffer()
     neutral_buffer = Buffer()
@@ -86,30 +86,59 @@ def start_app(store: RetroStore, connection_string: str = ''):
     input_buffer = Buffer()
     input = Window(content=BufferControl(buffer=input_buffer), height=1)
 
-    root_container = HSplit([
-        VSplit([
-            HSplit([
-                Window(content=FormattedTextControl(text=':)'), height=1, align=WindowAlign.CENTER),
-                Window(height=1, char='-'),
-                Window(content=BufferControl(buffer=good_buffer)),
-            ], style="fg:white bold bg:ansigreen"),
-            Window(width=2, char='|'),
-            HSplit([
-                Window(content=FormattedTextControl(text=':|'), height=1, align=WindowAlign.CENTER),
-                Window(height=1, char='-'),
-                Window(content=BufferControl(buffer=neutral_buffer)),
-            ], style="fg:white bold bg:ansiyellow"),
-            Window(width=2, char='|'),
-            HSplit([
-                Window(content=FormattedTextControl(text=':('), height=1, align=WindowAlign.CENTER),
-                Window(height=1, char='-'),
-                Window(content=BufferControl(buffer=bad_buffer)),
-            ], style="fg:white bold bg:ansired"),
-
-        ]),
-        Window(content=FormattedTextControl(text=f'Invite: {connection_string}'), height=1, align=WindowAlign.CENTER),
-        input
-    ], style='bg:grey')
+    root_container = HSplit(
+        [
+            VSplit(
+                [
+                    HSplit(
+                        [
+                            Window(
+                                content=FormattedTextControl(text=":)"),
+                                height=1,
+                                align=WindowAlign.CENTER,
+                            ),
+                            Window(height=1, char="-"),
+                            Window(content=BufferControl(buffer=good_buffer)),
+                        ],
+                        style="fg:white bold bg:ansigreen",
+                    ),
+                    Window(width=2, char="|"),
+                    HSplit(
+                        [
+                            Window(
+                                content=FormattedTextControl(text=":|"),
+                                height=1,
+                                align=WindowAlign.CENTER,
+                            ),
+                            Window(height=1, char="-"),
+                            Window(content=BufferControl(buffer=neutral_buffer)),
+                        ],
+                        style="fg:white bold bg:ansiyellow",
+                    ),
+                    Window(width=2, char="|"),
+                    HSplit(
+                        [
+                            Window(
+                                content=FormattedTextControl(text=":("),
+                                height=1,
+                                align=WindowAlign.CENTER,
+                            ),
+                            Window(height=1, char="-"),
+                            Window(content=BufferControl(buffer=bad_buffer)),
+                        ],
+                        style="fg:white bold bg:ansired",
+                    ),
+                ]
+            ),
+            Window(
+                content=FormattedTextControl(text=f"Invite: {connection_string}"),
+                height=1,
+                align=WindowAlign.CENTER,
+            ),
+            input,
+        ],
+        style="bg:grey",
+    )
 
     layout = Layout(root_container)
     layout.focus(input)
@@ -126,5 +155,5 @@ def start_app(store: RetroStore, connection_string: str = ''):
     app.run()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start_app(InMemoryStore())

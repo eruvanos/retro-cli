@@ -5,9 +5,9 @@ from typing import Dict, List, Optional
 
 
 class Category:
-    GOOD = 'GOOD'
-    NEUTRAL = 'NEUTRAL'
-    BAD = 'BAD'
+    GOOD = "GOOD"
+    NEUTRAL = "NEUTRAL"
+    BAD = "BAD"
 
 
 @dataclass
@@ -58,6 +58,10 @@ class InMemoryStore(RetroStore):
 
     def list(self, category: Optional[str] = None) -> List[Item]:
         if category:
-            return [item for item in sorted(self._items.values(), key=lambda i: i.key) if item.category == category]
+            return [
+                item
+                for item in sorted(self._items.values(), key=lambda i: i.key)
+                if item.category == category
+            ]
         else:
             return [item for item in sorted(self._items.values(), key=lambda i: i.key)]
