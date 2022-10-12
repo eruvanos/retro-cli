@@ -48,6 +48,9 @@ class RPCStoreClient(Client, RetroStore):
     def remove(self, key: int):
         return self._rpc_call("remove", key=key)
 
+    def toggle(self, key: int):
+        return self._rpc_call("toggle", key=key)
+
 
 if __name__ == "__main__":
     # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

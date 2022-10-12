@@ -2,13 +2,16 @@ import asyncio
 from io import StringIO
 from time import time
 
-from prompt_toolkit import Application
+from colorama import Fore, Style
+from prompt_toolkit import Application, HTML
 from prompt_toolkit.buffer import Buffer
+from prompt_toolkit.formatted_text import to_formatted_text, FormattedText
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import HSplit, WindowAlign
 from prompt_toolkit.layout.containers import VSplit, Window
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
+from prompt_toolkit.patch_stdout import patch_stdout
 
 from retro.persistence import Category, RetroStore, InMemoryStore
 
@@ -33,11 +36,14 @@ def start_app(store: RetroStore, connection_string: str = ""):
             Category.BAD: StringIO(),
         }
         for item in items:
-            texts[item.category].write(f"{item.key}. {item.text}\n")
+            if item.done:
+                texts[item.category].write(f"{item.key}. ✅ <s>{item.text}</s>\n")
+            else:
+                texts[item.category].write(f"{item.key}. {item.text}\n")
 
-        good_buffer.text = texts[Category.GOOD].getvalue()
-        neutral_buffer.text = texts[Category.NEUTRAL].getvalue()
-        bad_buffer.text = texts[Category.BAD].getvalue()
+        good_buffer.text = to_formatted_text(HTML(texts[Category.GOOD].getvalue()))
+        neutral_buffer.text = to_formatted_text(HTML(texts[Category.NEUTRAL].getvalue()))
+        bad_buffer.text = to_formatted_text(HTML(texts[Category.BAD].getvalue()))
 
     @kb.add("c-m")
     def enter_(event):
@@ -52,6 +58,9 @@ def start_app(store: RetroStore, connection_string: str = ""):
         elif text.startswith("-"):
             input_buffer.reset()
             store.add_item(text[1:].strip(), Category.BAD)
+        elif text.startswith("!"):
+            input_buffer.reset()
+            store.toggle(int(text[1:].strip()))
 
         elif text.startswith("mv "):
             cmd, key, column = text.split()
@@ -79,9 +88,9 @@ def start_app(store: RetroStore, connection_string: str = ""):
         store.list(Category.GOOD)
         app.print_text(f"latency: {time() - start:.3f}")
 
-    good_buffer = Buffer()
-    neutral_buffer = Buffer()
-    bad_buffer = Buffer()
+    good_buffer = FormattedTextControl()
+    neutral_buffer = FormattedTextControl()
+    bad_buffer = FormattedTextControl()
 
     input_buffer = Buffer()
     input = Window(content=BufferControl(buffer=input_buffer), height=1)
@@ -98,7 +107,7 @@ def start_app(store: RetroStore, connection_string: str = ""):
                                 align=WindowAlign.CENTER,
                             ),
                             Window(height=1, char="-"),
-                            Window(content=BufferControl(buffer=good_buffer)),
+                            Window(content=good_buffer),
                         ],
                         style="fg:white bold bg:ansigreen",
                     ),
@@ -111,7 +120,7 @@ def start_app(store: RetroStore, connection_string: str = ""):
                                 align=WindowAlign.CENTER,
                             ),
                             Window(height=1, char="-"),
-                            Window(content=BufferControl(buffer=neutral_buffer)),
+                            Window(content=neutral_buffer),
                         ],
                         style="fg:white bold bg:ansiyellow",
                     ),
@@ -124,7 +133,7 @@ def start_app(store: RetroStore, connection_string: str = ""):
                                 align=WindowAlign.CENTER,
                             ),
                             Window(height=1, char="-"),
-                            Window(content=BufferControl(buffer=bad_buffer)),
+                            Window(content=bad_buffer),
                         ],
                         style="fg:white bold bg:ansired",
                     ),

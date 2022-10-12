@@ -15,6 +15,7 @@ class Item:
     key: int
     text: str
     category: str
+    done: bool = False
 
 
 class RetroStore(ABC):
@@ -34,6 +35,11 @@ class RetroStore(ABC):
     def remove(self, key: int):
         pass
 
+    @abstractmethod
+    def toggle(self, key: int):
+        """Changes status of item"""
+        pass
+
 
 class InMemoryStore(RetroStore):
     def __init__(self):
@@ -50,7 +56,8 @@ class InMemoryStore(RetroStore):
         self._items[next_id] = Item(next_id, text, category)
 
     def move_item(self, key: int, category: str):
-        self._items[key].category = category
+        if key in self._items:
+            self._items[key].category = category
 
     def remove(self, key: int):
         if key in self._items:
@@ -65,3 +72,8 @@ class InMemoryStore(RetroStore):
             ]
         else:
             return [item for item in sorted(self._items.values(), key=lambda i: i.key)]
+
+    def toggle(self, key: int):
+        if key in self._items:
+            self._items[key].done = not self._items[key].done
+

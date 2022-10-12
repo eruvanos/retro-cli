@@ -6,8 +6,13 @@ Only the host needs an ngrok.com account.
 ## Features
 
 * Host or join retro
+  * Add item in HAPPY, NEUTRAL, or BAD column
+  * Remove item
+  * Move item
+  * Mark item as done (strike through not visualized in Jetbrains IDEA terminals)
 * Connectin via ngrox.com
 * End-to-End encryption
+
 
 
 ![screenshot](screenshot.png)
@@ -75,15 +80,21 @@ Prefix:
 
 `mv <item id> <column prefix>`
 
+##### Toggle item done-state
+
+`! <item id>`
+
 ##### Remove an item
 
 `rm <item id>`
 
 ## Missing
 
-- mark items as done
 - persist retro items on host, so a restart doesn't kill them
+- use [Textualize](https://github.com/Textualize/textual)
+  - bring mouse support
 - show help within the app
+- add tests!
 
 
 ## Architecture
