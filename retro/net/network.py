@@ -3,6 +3,7 @@ import json
 import logging
 import socket
 from json import JSONEncoder, JSONDecodeError
+from threading import Lock
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
@@ -21,18 +22,21 @@ class Network:
 
     def __init__(self, socket: socket.socket):
         self.socket = socket
+        self._lock = Lock()
 
     def _recv(self) -> str:
-        raw_length = self.socket.recv(self.BUFFER)
-        length = int.from_bytes(raw_length, self.ORDER, signed=False)
-        data = self.socket.recv(length)
-        return data.decode()
+        with self._lock:
+            raw_length = self.socket.recv(self.BUFFER)
+            length = int.from_bytes(raw_length, self.ORDER, signed=False)
+            data = self.socket.recv(length)
+            return data.decode()
 
     def _send(self, msg: str):
-        data = msg.encode()
-        length = int.to_bytes(len(data), self.BUFFER, self.ORDER, signed=False)
-        self.socket.sendall(length)
-        self.socket.sendall(data)
+        with self._lock:
+            data = msg.encode()
+            length = int.to_bytes(len(data), self.BUFFER, self.ORDER, signed=False)
+            self.socket.sendall(length)
+            self.socket.sendall(data)
 
     def recv_json(self) -> Optional[dict]:
         data = self._recv()

@@ -42,6 +42,8 @@ class Backend(Thread):
     def serve(self):
         store = RPCStore()
 
+        logger.info(f"Connection string: {self.connection_string()}")
+
         threads = []
         # Listen for new connections
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -67,18 +69,6 @@ class Backend(Thread):
         return base64.urlsafe_b64encode(string.encode()).decode()
 
 
-# class EchoConnectionHandler(Thread):
-#     def __init__(self, network: Network):
-#         super().__init__(daemon=True)
-#         self.network = network
-#
-#     def run(self):
-#         with self.network:
-#             while data := self.network.recv_json():
-#                 print('receive:', data)
-#                 self.network.send_json(data)
-
-
 class RPCHandler:
     def rpc(self, data: Dict) -> Dict:
         raise NotImplementedError()
@@ -93,9 +83,7 @@ class RPCConnectionHandler(Thread):
     def run(self):
         with self.network:
             while data := self.network.recv_json():
-                logger.debug("request:", data)
                 response = self.rpc_handler.rpc(data)
-                logger.debug("response:", response)
                 self.network.send_json(response)
 
 

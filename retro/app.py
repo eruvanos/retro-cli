@@ -1,19 +1,20 @@
 import asyncio
+import logging
 from io import StringIO
 from time import time
 
-from colorama import Fore, Style
 from prompt_toolkit import Application, HTML
 from prompt_toolkit.buffer import Buffer
-from prompt_toolkit.formatted_text import to_formatted_text, FormattedText
+from prompt_toolkit.formatted_text import to_formatted_text
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import HSplit, WindowAlign
 from prompt_toolkit.layout.containers import VSplit, Window
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
-from prompt_toolkit.patch_stdout import patch_stdout
 
 from retro.persistence import Category, RetroStore, InMemoryStore
+
+logger = logging.getLogger(__name__)
 
 
 def start_app(store: RetroStore, connection_string: str = ""):
@@ -42,7 +43,9 @@ def start_app(store: RetroStore, connection_string: str = ""):
                 texts[item.category].write(f"{item.key}. {item.text}\n")
 
         good_buffer.text = to_formatted_text(HTML(texts[Category.GOOD].getvalue()))
-        neutral_buffer.text = to_formatted_text(HTML(texts[Category.NEUTRAL].getvalue()))
+        neutral_buffer.text = to_formatted_text(
+            HTML(texts[Category.NEUTRAL].getvalue())
+        )
         bad_buffer.text = to_formatted_text(HTML(texts[Category.BAD].getvalue()))
 
     @kb.add("c-m")
@@ -155,9 +158,16 @@ def start_app(store: RetroStore, connection_string: str = ""):
     app = Application(layout=layout, key_bindings=kb, full_screen=True)
 
     async def active_refresh():
-        while True:
-            refresh()
-            await asyncio.sleep(2)
+        counter = 0
+        while counter < 5:
+            try:
+                refresh()
+                await asyncio.sleep(2)
+            except:
+                counter += 1
+                logger.exception(f"Refresh failed for the {counter}. time")
+
+        logger.error(f"Refresh failed too often, fallback tu manual refresh.")
 
     app.create_background_task(active_refresh())
 

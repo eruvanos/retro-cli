@@ -1,17 +1,21 @@
 import base64
+import logging
 import socket
-from typing import Optional
+from threading import Lock
+from typing import Optional, List
 from urllib.parse import urlparse
 from uuid import uuid4
 
 from retro.net.network import SecureNetwork, Network
 from retro.persistence import Category, RetroStore, Item
 
+logger = logging.getLogger(__name__)
+
 
 class Client:
     net: Network
 
-    def __init__(self, net: Network = None):
+    def __init__(self, *, net: Network = None):
         self.net = net
 
     def connect(self, connection_string: str):
@@ -26,29 +30,52 @@ class Client:
 
 
 class RPCStoreClient(Client, RetroStore):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._lock = Lock()
+
     def _rpc_call(self, method: str, **params):
-        request_id = str(uuid4())
+        # TODO move RPC client into its own class
+        with self._lock:
+            request_id = str(uuid4())
+            try:
+                request = {
+                    "jsonrpc": "2.0",
+                    "method": method,
+                    "params": params,
+                    "id": request_id,
+                }
+                logger.debug(f"-> {request_id}: {request}")
+                self.net.send_json(request)
+                response = self.net.recv_json()
+                logger.debug(f"<- {request_id}: {response}")
 
-        self.net.send_json(
-            {"jsonrpc": "2.0", "method": method, "params": params, "id": request_id}
-        )
-
-        response = self.net.recv_json()
+            except BrokenPipeError:
+                logger.exception(f"Lost connection, I guess, this is the end.")
+                raise
+            except Exception:
+                logger.debug(f"xx {request_id}:failed!")
+                logger.exception(f"RPC_ERROR {method}({params})")
+                return None
         return response.get("result")
 
-    def list(self, category: Optional[str] = None):
-        return [Item(**item) for item in self._rpc_call("list", category=category)]
+    def list(self, category: Optional[str] = None) -> List[Item]:
+        response = self._rpc_call("list", category=category)
+        if not response:
+            return []
 
-    def add_item(self, text: str, category: str):
+        return [Item(**item) for item in response]
+
+    def add_item(self, text: str, category: str) -> None:
         return self._rpc_call("add_item", text=text, category=category)
 
-    def move_item(self, key: int, category: str):
+    def move_item(self, key: int, category: str) -> None:
         return self._rpc_call("move_item", key=key, category=category)
 
-    def remove(self, key: int):
+    def remove(self, key: int) -> None:
         return self._rpc_call("remove", key=key)
 
-    def toggle(self, key: int):
+    def toggle(self, key: int) -> None:
         return self._rpc_call("toggle", key=key)
 
 

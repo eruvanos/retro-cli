@@ -20,23 +20,23 @@ class Item:
 
 class RetroStore(ABC):
     @abstractmethod
-    def list(self, category: Optional[str] = None):
+    def list(self, category: Optional[str] = None) -> List[Item]:
         pass
 
     @abstractmethod
-    def add_item(self, text: str, category: str):
+    def add_item(self, text: str, category: str) -> None:
         pass
 
     @abstractmethod
-    def move_item(self, key: int, category: str):
+    def move_item(self, key: int, category: str) -> None:
         pass
 
     @abstractmethod
-    def remove(self, key: int):
+    def remove(self, key: int) -> None:
         pass
 
     @abstractmethod
-    def toggle(self, key: int):
+    def toggle(self, key: int) -> None:
         """Changes status of item"""
         pass
 
@@ -48,18 +48,18 @@ class InMemoryStore(RetroStore):
         self.__key_generator = count()
 
     # write access
-    def next_id(self):
+    def next_id(self) -> int:
         return next(self.__key_generator)
 
-    def add_item(self, text: str, category: str):
+    def add_item(self, text: str, category: str) -> None:
         next_id = self.next_id()
         self._items[next_id] = Item(next_id, text, category)
 
-    def move_item(self, key: int, category: str):
+    def move_item(self, key: int, category: str) -> None:
         if key in self._items:
             self._items[key].category = category
 
-    def remove(self, key: int):
+    def remove(self, key: int) -> None:
         if key in self._items:
             del self._items[key]
 
@@ -73,7 +73,6 @@ class InMemoryStore(RetroStore):
         else:
             return [item for item in sorted(self._items.values(), key=lambda i: i.key)]
 
-    def toggle(self, key: int):
+    def toggle(self, key: int) -> None:
         if key in self._items:
             self._items[key].done = not self._items[key].done
-

@@ -10,7 +10,7 @@ Only the host needs an ngrok.com account.
   * Remove item
   * Move item
   * Mark item as done (strike through not visualized in Jetbrains IDEA terminals)
-* Connectin via ngrox.com
+* Connection via ngrox.com
 * End-to-End encryption
 
 
@@ -49,6 +49,9 @@ Starts the storage backend and generates an invitation code, which is shown in t
 ngrok authtoken <auth token>
 
 retro -s
+
+# to only start the server, without the retro UI
+retro -so
 ```
 
 #### Join a host
@@ -64,6 +67,8 @@ retro
 #### Shortcuts
 
 * `CTRL + q` - Exit
+* `CTRL + r` - Request data from server (Refresh)
+* `CTRL + p` - Ping server and print latency
 
 #### Commands
 
