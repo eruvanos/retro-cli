@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "retro"
-version = "0.1.0"
+version = "0.1.1"
 description = "A cli tool for distributed team retros (build in a few hours)"
 authors = ["Maic Siemering <maic@siemering.tech>"]
 
