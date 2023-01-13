@@ -32,7 +32,11 @@ pyenv install 3.9.0
 ### Install cli
 
 ```
-pip install git+https://github.com/eruvanos/retro-cli.git
+pipx install git+https://github.com/eruvanos/retro-cli.git#egg=retro 
+
+# or with pure pip
+
+pip install git+https://github.com/eruvanos/retro-cli.git#egg=retro
 ```
 
 > This will also install ngrok on your path
