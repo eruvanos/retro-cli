@@ -9,7 +9,7 @@ from pyngrok.conf import PyngrokConfig
 from pyngrok.ngrok import NgrokTunnel
 
 from retro.net.network import Network, SecureNetwork
-from retro.persistence import InMemoryStore
+from retro.persistence import InMemoryStore, RetroStore, FileStore
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class Backend(Thread):
             )
 
     def serve(self):
-        store = RPCStore()
+        store = RPCStore(FileStore("./retro.json"))
 
         logger.info(f"Connection string: {self.connection_string()}")
 
@@ -88,8 +88,8 @@ class RPCConnectionHandler(Thread):
 
 
 class RPCStore(RPCHandler):
-    def __init__(self):
-        self.store = InMemoryStore()
+    def __init__(self, store: RetroStore = None):
+        self.store = store or InMemoryStore()
 
     def rpc(self, data: Dict):
         method_name = data.get("method")

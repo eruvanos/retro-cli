@@ -10,6 +10,7 @@ prompt-toolkit = "^3.0.36"
 colorama = "^0.4.4"
 pyngrok = "^5.2.1"
 cryptography = "^39.0.0"
+atomicwrites = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 
