@@ -6,7 +6,7 @@ authors = ["Maic Siemering <maic@siemering.tech>"]
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-prompt-toolkit = "^3.0.36"
+prompt-toolkit = "^3.0.37"
 colorama = "^0.4.4"
 pyngrok = "^5.2.1"
 cryptography = "^39.0.0"
