@@ -1,3 +1,6 @@
+> This is more like a POC. While the base features work, the user experience might be a little ruff.
+> I might come back to reimplement this using [Textual](https://www.textualize.io/projects/#textual)
+
 # Retro on the commandline
 
 Retro-CLI uses ngrok to setup a local server and generate an invitation code for others to join.
