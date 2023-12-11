@@ -169,12 +169,13 @@ files = [
 
 [[package]]
 name = "pyngrok"
-version = "7.0.1"
+version = "7.0.3"
 description = "A Python wrapper for ngrok."
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 files = [
-    {file = "pyngrok-7.0.1.tar.gz", hash = "sha256:c132b40e7b1905b07d9c731ef215108cc977b1bbf445a146894e0d489b213eb6"},
+    {file = "pyngrok-7.0.3-py3-none-any.whl", hash = "sha256:0ab3662b6634b19cd38f76de83ef5b4b72fe03cbf5bbcf27e4c0531a9ac0a770"},
+    {file = "pyngrok-7.0.3.tar.gz", hash = "sha256:44d8b48af40ab0b6ff243f7ebdd25819fe470c2e8199e35db1e476394f2fd6e6"},
 ]
 
 [package.dependencies]
@@ -243,4 +244,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "b87b313d91b8ef118a52686ce1e10efe00fc7dadae9aedb6f5bae79ea0adab1a"
+content-hash = "b452a3af9bbdb8229f70b55919c2e08b0447d84afeff36a6faff88fa273e4e10"
