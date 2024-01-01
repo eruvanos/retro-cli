@@ -8,7 +8,7 @@ authors = ["Maic Siemering <maic@siemering.tech>"]
 python = "^3.8.1"
 prompt-toolkit = "^3.0.43"
 colorama = "^0.4.4"
-pyngrok = "^7.0.3"
+pyngrok = "^7.0.5"
 cryptography = "^41.0.7"
 atomicwrites = "^1.4.1"
 
