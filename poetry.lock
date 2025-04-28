@@ -181,14 +181,14 @@ files = [
 
 [[package]]
 name = "pyngrok"
-version = "7.2.3"
-description = "A Python wrapper for ngrok."
+version = "7.2.5"
+description = "A Python wrapper for ngrok"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "pyngrok-7.2.3-py3-none-any.whl", hash = "sha256:d199afcef9c9f285eacdb622fd22261e91b1ba5a7802182ad2a9a702111e0865"},
-    {file = "pyngrok-7.2.3.tar.gz", hash = "sha256:ce33c8a3b2ee6e7f727ed1c99b5dac9476ffe1905eab6b8aa506a9cbe5d71d4e"},
+    {file = "pyngrok-7.2.5-py3-none-any.whl", hash = "sha256:ef796237bd871ea716ab62237a324ee53999307b208640bf91d13baffdf5aa6b"},
+    {file = "pyngrok-7.2.5.tar.gz", hash = "sha256:9a12852d63fbea251a463d855d510ed50401a02e69b4a7a29c86d1b50c5e3875"},
 ]
 
 [package.dependencies]
@@ -196,7 +196,7 @@ PyYAML = ">=5.1"
 
 [package.extras]
 dev = ["coverage[toml]", "flake8", "flake8-pyproject", "pep8-naming", "psutil", "pytest"]
-docs = ["Sphinx", "mypy", "sphinx-notfound-page", "sphinx-substitution-extensions", "sphinx_autodoc_typehints (==1.25.2)", "types-PyYAML"]
+docs = ["Sphinx (<8.2)", "mypy", "sphinx-notfound-page", "sphinx-substitution-extensions", "sphinx_autodoc_typehints (==1.25.2)", "types-PyYAML"]
 
 [[package]]
 name = "PyYAML"
@@ -263,4 +263,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.8.1"
-content-hash = "21047a042de0e217e1e0047942be3f06603e46a8f4f6238acb14b9338f0deb58"
+content-hash = "a80caa46a5bce0d05d0790215841417a3db9ebb1c02e936890169069a969a0fc"
