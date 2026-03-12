@@ -1,5 +1,4 @@
 
-
 .DS_Store
 
 .idea
@@ -7,3 +6,5 @@
 *.log
 
 retro.json
+
+.venv/
