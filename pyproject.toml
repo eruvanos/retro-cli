@@ -7,7 +7,7 @@ requires-python = ">=3.8.1"
 dependencies = [
     "prompt-toolkit>=3.0.52",
     "colorama>=0.4.6",
-    "pyngrok>=7.2.12",
+    "pyngrok>=8.0.0",
     "cryptography>=46.0.7",
     "atomicwrites>=1.4.1",
 ]
