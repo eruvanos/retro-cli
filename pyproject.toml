@@ -5,7 +5,7 @@ description = "A cli tool for distributed team retros (build in a few hours)"
 authors = [{ name = "Maic Siemering", email = "maic@siemering.tech" }]
 requires-python = ">=3.8.1"
 dependencies = [
-    "prompt-toolkit>=3.0.52",
+    "prompt-toolkit>=3.0.53",
     "colorama>=0.4.6",
     "pyngrok>=8.1.2",
     "cryptography>=49.0.0",
