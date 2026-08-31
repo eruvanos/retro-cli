@@ -8,7 +8,7 @@ dependencies = [
     "prompt-toolkit>=3.0.53",
     "colorama>=0.4.6",
     "pyngrok>=8.1.2",
-    "cryptography>=50.0.0",
+    "cryptography>=50.0.1",
     "atomicwrites>=1.4.1",
 ]
 
